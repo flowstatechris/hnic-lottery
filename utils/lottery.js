@@ -360,7 +360,7 @@ const lotteryAbi = [
 const lotteryContract = web3 => {
     return new web3.eth.Contract(
         lotteryAbi,
-        "0xC0D0e54255618f57a2602F2a2bfBeCf5b29fea98"
+        "0x2D3F18f8183AD03E1e28BaC79353dEdB0CEff67B"
     )
 	}
 
