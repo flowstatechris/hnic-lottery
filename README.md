@@ -1,1 +1,1 @@
-lottery contract address: 0x485b6e5685f072c4c18fb1e062e6aeeac1382df3
+lottery contract address: 0xC0D0e54255618f57a2602F2a2bfBeCf5b29fea98
