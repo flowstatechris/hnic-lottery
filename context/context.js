@@ -83,11 +83,26 @@ export const AppProvider = ({ children }) => {
   }
 
 
+  const getRandom = async () => {
+    try {
+      let tx = await lcContract.methods.getRandomNumber().send({
+        from: address,
+        gas: 400000,
+        gasPrice: null,
+      })
+
+      console.log(tx)
+      updateLottery()
+    } catch (err) {
+      console.log(err, 'Get Random')
+    }
+  }
+
   const pickWinner = async () => {
     try {
       let tx = await lcContract.methods.pickWinner().send({
         from: address,
-        gas: 300000,
+        gas: 400000,
         gasPrice: null,
       })
 
@@ -143,6 +158,7 @@ export const AppProvider = ({ children }) => {
         lotteryPlayers,
         enterLottery,
         pickWinner,
+        getRandom,
         lotteryId,
         lastWinner,
         etherscanUrl,
