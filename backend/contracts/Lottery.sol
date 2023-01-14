@@ -2,6 +2,7 @@
 pragma solidity ^0.8.17;
 
 import "@chainlink/contracts/src/v0.8/VRFV2WrapperConsumerBase.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
 
 contract Lottery is VRFV2WrapperConsumerBase{
 
@@ -39,11 +40,14 @@ contract Lottery is VRFV2WrapperConsumerBase{
     // Cannot exceed VRFV2Wrapper.getConfig().maxNumWords.
     uint32 numWords = 1;
 
-    // Address LINK - hardcoded for Goerli
-    address linkAddress = 0x326C977E6efc84E512bB9C30f76E30c160eD06FB;
+    // Address LINK - hardcoded for Polygon Mainnet
+    address linkAddress = 0xb0897686c545045aFc77CF20eC7A532E3120E0F1;
+    
+    // address WRAPPER - hardcoded for Polygon Mainnnet
+    address wrapperAddress = 0x4e42f0adEB69203ef7AaA4B7c414e5b1331c14dc;
 
-    // address WRAPPER - hardcoded for Goerli
-    address wrapperAddress = 0x708701a1DfF4f478de54383E49a627eD4852C816;
+    //this variable allows the contract to make calls/retrieve information regarding LINK token
+    LinkTokenInterface link = LinkTokenInterface(linkAddress);
 
  constructor()
         VRFV2WrapperConsumerBase(linkAddress, wrapperAddress)
@@ -53,7 +57,7 @@ contract Lottery is VRFV2WrapperConsumerBase{
     }
 
     modifier isOperator() {
-        require((msg.sender == lotteryOperator), "Caller is not the lottery operator");
+        require(IsOperator(), "Caller is not the lottery operator");
         _;
     }
 
@@ -68,10 +72,21 @@ contract Lottery is VRFV2WrapperConsumerBase{
         lotteryOperator = newOwner;
     }
 
+    function requestRandomWords() external isOperator returns (uint256 requestId)
+    {
+        requestId = requestRandomness(
+            callbackGasLimit,
+            requestConfirmations,
+            numWords
+        );
+
+        return requestId;
+    }
+
     //note: VRF requires the gaslimit on the requestRandomness() call to be 400,000
     function getRandomNumber() public isOperator returns (uint256 requestId) {
 
-        require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK in contract");
+        //require(link.balanceOf(address(this)) >= fee, "Not enough LINK in contract");
 
          requestId = requestRandomness(
             callbackGasLimit,
@@ -79,7 +94,7 @@ contract Lottery is VRFV2WrapperConsumerBase{
             numWords
         );
 
-        if(LINK.balanceOf(address(this)) <= fee) {
+        if(link.balanceOf(address(this)) <= fee) {
             emit lowLink();
         }
 
@@ -110,6 +125,10 @@ contract Lottery is VRFV2WrapperConsumerBase{
         return players;
     }
 
+    function getLink() public view returns (uint256) {
+        return link.balanceOf(address(this));
+    }
+
     function enter() public payable {
         require(msg.value > .01 ether);
 
@@ -117,12 +136,8 @@ contract Lottery is VRFV2WrapperConsumerBase{
         lottoPot += msg.value;
     }
 
-    function checkWinningsAmount() public view returns (uint256) {
-        address payable winner = payable(msg.sender);
-
-        uint256 reward2Transfer = winnings[winner];
-
-        return reward2Transfer;
+    function checkWinningsAmount() public view returns (uint) {      
+        return winnings[msg.sender];
     }
 
     function checkCommissionAmount() public view returns (uint256) {
@@ -137,7 +152,7 @@ contract Lottery is VRFV2WrapperConsumerBase{
 
         uint256 currPot = lottoPot;
 
-        uint256 vrf_fee = 3 ether;
+        uint256 vrf_fee = 0.005 ether; // SWITCH BACK TO 3 FOR POLYGON
 
         currPot -= vrf_fee;
 
@@ -166,10 +181,11 @@ contract Lottery is VRFV2WrapperConsumerBase{
         lotteryOperator.transfer(amount);
     }
 
-    function withdrawLink() public payable isOperator {
-        require(LINK.balanceOf(address(this)) >= 0, "Not enough LINK in contract to withdraw");
+    function withdrawLink(uint256 _amount) public isOperator {
+        require(_amount > 0, "Amount must be greater than 0");
+        require(link.balanceOf(address(this)) >= _amount, "Contract has insufficient LINK balance");
 
-        LINK.transfer(lotteryOperator, LINK.balanceOf(address(this)));
+        link.transfer(lotteryOperator, _amount);
     }
 
     function withdrawWinnings() public payable isWinner {
@@ -201,5 +217,9 @@ contract Lottery is VRFV2WrapperConsumerBase{
 
     function IsWinner() public view returns (bool) {
         return winnings[msg.sender] > 0;
+    }
+
+     function IsOperator() public view returns (bool) {
+        return (msg.sender == lotteryOperator);
     }
 }
