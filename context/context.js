@@ -54,7 +54,7 @@ export const AppProvider = ({ children }) => {
       await lcContract.methods.enter().send({
         from: address,
         // 0.1 ETH in Wei, 
-        value: '100000000000000000',
+        value: '1000000000000000000',
         // 0.0003 ETH in Gwei, 3000000
         gas: 300000,
         gasPrice: null,
