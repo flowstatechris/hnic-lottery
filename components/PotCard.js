@@ -27,7 +27,7 @@ const PotCard = () => {
       <div className={style.btn} onClick={enterLottery}>
         Enter: 1 MATIC
       </div>
-      {(address == "0x74D65e1D49e3d79167C2c99dAA16D154D8cB832f") ? (
+      {(address == "0x96C8eDA0813D75ab442cc7107A3964390986a77C") ? (
         <><div className={style.btn} onClick={getRandom}>
           Get Random Number
         </div><div className={style.btn} onClick={pickWinner}>
@@ -35,7 +35,7 @@ const PotCard = () => {
           </div></>
           
       ) : (
-        (address != "0x74D65e1D49e3d79167C2c99dAA16D154D8cB832f")
+        (address != "0x96C8eDA0813D75ab442cc7107A3964390986a77C")
       )}
     </div>
   )
