@@ -3,7 +3,7 @@ import { useAppContext } from '../context/context'
 import truncateEthAddress from 'truncate-eth-address'
 
 const UserCard = () => {
-  const { address, winnings, withdrawWinnings, checkWinnings} =
+  const { address, winnings, withdrawWinnings} =
     useAppContext()
 
   return (

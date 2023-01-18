@@ -13,6 +13,8 @@ export const AppProvider = ({ children }) => {
   const [lastWinner, setLastWinner] = useState([])
   const [lotteryId, setLotteryId] = useState()
   const [etherscanUrl, setEtherscanUrl] = useState()
+  const [playerCount, setPlayerCount] = useState()
+  const [lottoStatus, setLottoStatus] = useState()
 
   useEffect(() => {
     updateLottery()
@@ -23,8 +25,12 @@ export const AppProvider = ({ children }) => {
       try {        
         const pot = await lcContract.methods.getPot().call()
         const lottoId = await lcContract.methods.getlotteryId().call()
-        
         const lcwinnings = await lcContract.methods.winnings(address).call()
+        const lcPlayerCount = await lcContract.methods.getPlayers().call()
+
+        setLottoStatus(true)
+
+        setPlayerCount(lcPlayerCount.length)
 
         setWinnings(web3.utils.fromWei(lcwinnings, 'ether'))
 
@@ -35,17 +41,14 @@ export const AppProvider = ({ children }) => {
         setLotteryId(await lcContract.methods.getlotteryId().call())
 
         setLastWinner(await lcContract.methods.getWinnerByLottery(lottoId - 1).call())
+
         console.log([...lastWinner], 'Last Winners')
         console.log(winnings)
+        console.log(lcPlayerCount.length)
       } catch (error) {
         console.log(error, 'updateLottery')
       }
     }
-  }
-
-  const checkWinnings = async () => {
-    const lcwinnings = await lcContract.methods.winnings(address).call()
-    setWinnings(web3.utils.fromWei(lcwinnings, 'ether'))
   }
 
   const enterLottery = async () => {
@@ -113,6 +116,33 @@ export const AppProvider = ({ children }) => {
     }
   }
 
+  const closeLottery = async () => {
+
+    setLottoStatus(false)
+
+    try {
+      let random = await lcContract.methods.getRandomNumber().send({
+        from: address,
+        gas: 400000,
+        gasPrice: null,
+      })
+
+      let pick = await lcContract.methods.pickWinner().send({
+        from: address,
+        gas: 400000,
+        gasPrice: null,
+      })
+
+      console.log(random)
+      console.log(pick)
+
+      setLottoStatus(true)
+      updateLottery()
+    } catch (err) {
+      console.log(err, 'Pick and Pay Winner')
+    }
+  }
+
   const connectWallet = async () => {
   /* check if MetaMask is installed */
   if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
@@ -162,6 +192,9 @@ export const AppProvider = ({ children }) => {
         lotteryId,
         lastWinner,
         etherscanUrl,
+        playerCount,
+        closeLottery,
+        lottoStatus,
       }}
     >
       {children}
