@@ -60,7 +60,7 @@ export const AppProvider = ({ children }) => {
         value: '1000000000000000000',
         // 0.0003 ETH in Gwei, 3000000
         gas: 300000,
-        gasPrice: null,
+        gasPrice: 50000000000,
       })
       updateLottery()
     } catch (err) {
@@ -77,7 +77,7 @@ export const AppProvider = ({ children }) => {
         value: '0',
         // 0.0003 ETH in Gwei, 3000000
         gas: 300000,
-        gasPrice: null,
+        gasPrice: 50000000000,
       })
       updateLottery()
     } catch (err) {
@@ -91,7 +91,7 @@ export const AppProvider = ({ children }) => {
       let tx = await lcContract.methods.getRandomNumber().send({
         from: address,
         gas: 400000,
-        gasPrice: null,
+        gasPrice: 50000000000,
       })
 
       console.log(tx)
@@ -106,7 +106,7 @@ export const AppProvider = ({ children }) => {
       let tx = await lcContract.methods.pickWinner().send({
         from: address,
         gas: 400000,
-        gasPrice: null,
+        gasPrice: 50000000000,
       })
 
       console.log(tx)
@@ -124,13 +124,13 @@ export const AppProvider = ({ children }) => {
       let random = await lcContract.methods.getRandomNumber().send({
         from: address,
         gas: 400000,
-        gasPrice: null,
+        gasPrice: 50000000000,
       })
 
       let pick = await lcContract.methods.pickWinner().send({
         from: address,
         gas: 400000,
-        gasPrice: null,
+        gasPrice: 50000000000,
       })
 
       console.log(random)
