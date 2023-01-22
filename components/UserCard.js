@@ -3,7 +3,7 @@ import { useAppContext } from '../context/context'
 import truncateEthAddress from 'truncate-eth-address'
 
 const UserCard = () => {
-  const { address, winnings, withdrawWinnings} =
+  const { address, winnings, withdrawWinnings, commission, withdrawCommission} =
     useAppContext()
 
   return (
@@ -23,6 +23,16 @@ const UserCard = () => {
       )
       ) : (
         <div className={style.btn}> No winnings to claim </div>
+      )}
+      {(address == "0x96C8eDA0813D75ab442cc7107A3964390986a77C") ? (
+        <><div className={style.pot}>
+        Commission Amount: <span className={style.goldAccent}> {commission} MATIC </span>
+      </div>
+          <div className={style.btn} onClick={withdrawCommission}>
+            Withdraw Commission
+          </div></>
+      ) : (
+        (address != "0x96C8eDA0813D75ab442cc7107A3964390986a77C")
       )}  
     </div>
   )

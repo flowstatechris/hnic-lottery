@@ -9,6 +9,7 @@ export const AppProvider = ({ children }) => {
   const [lcContract, setLcContract] = useState()
   const [lotteryPot, setLotteryPot] = useState()
   const [winnings, setWinnings] = useState()
+  const [commission, setCommission] = useState()
   const [lotteryPlayers, setPlayers] = useState([])
   const [lastWinner, setLastWinner] = useState([])
   const [lotteryId, setLotteryId] = useState()
@@ -26,6 +27,7 @@ export const AppProvider = ({ children }) => {
         const pot = await lcContract.methods.getPot().call()
         const lottoId = await lcContract.methods.getlotteryId().call()
         const lcwinnings = await lcContract.methods.winnings(address).call()
+        const lccomission = await lcContract.methods.operatorTotalCommission().call()
         const lcPlayerCount = await lcContract.methods.getPlayers().call()
 
         setLottoStatus(true)
@@ -33,6 +35,8 @@ export const AppProvider = ({ children }) => {
         setPlayerCount(lcPlayerCount.length)
 
         setWinnings(web3.utils.fromWei(lcwinnings, 'ether'))
+
+        setCommission(web3.utils.fromWei(lccomission, 'ether'))
 
         setLotteryPot(web3.utils.fromWei(pot, 'ether'))
 
@@ -82,6 +86,23 @@ export const AppProvider = ({ children }) => {
       updateLottery()
     } catch (err) {
       console.log(err, 'claim winnings')
+    }
+  }
+
+  const withdrawCommission = async () => {
+    try {
+      console.log('claiming winnings')
+      await lcContract.methods.withdrawCommission().send({
+        from: address,
+        // 0.015 ETH in Wei, 
+        value: '0',
+        // 0.0003 ETH in Gwei, 3000000
+        gas: 300000,
+        gasPrice: 50000000000,
+      })
+      updateLottery()
+    } catch (err) {
+      console.log(err, 'claim commission')
     }
   }
 
@@ -190,6 +211,8 @@ export const AppProvider = ({ children }) => {
         pickWinner,
         getRandom,
         lotteryId,
+        commission,
+        withdrawCommission,
         lastWinner,
         etherscanUrl,
         playerCount,
