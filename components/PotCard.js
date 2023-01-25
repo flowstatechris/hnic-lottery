@@ -25,12 +25,12 @@ const PotCard = () => {
         )
       )}
 
-      {(playerCount < 10) ? (
+      {(playerCount < 5) ? (
       <div className={style.btn} onClick={enterLottery}>
         Enter: 1 MATIC
       </div>
       ) : 
-         (playerCount >= 10 && (
+         (playerCount >= 5 && (
           <div className={style.btn}>
             Lottery Closed
           </div>
