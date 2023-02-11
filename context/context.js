@@ -2,6 +2,7 @@ import { createContext, useState, useEffect, useContext } from 'react'
 import Web3 from 'web3'
 import { Network, Alchemy } from 'alchemy-sdk';
 import lotteryContract from '../utils/lottery'
+require('dotenv').config();
 export const appContext = createContext()
 
 export const AppProvider = ({ children }) => {
@@ -199,7 +200,7 @@ export const AppProvider = ({ children }) => {
   }
 }
 const settings = {
-  apiKey: "Nj2GVZGUdoa4o5SLgb2MyHaD7JrYDChB",
+  apiKey: process.env.ALCHEMY_API_KEY,
   network: Network.MATIC_MAINNET,
 };
 
