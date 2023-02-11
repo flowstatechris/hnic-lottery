@@ -210,18 +210,18 @@ const latestBlock = alchemy.core.getBlockNumber();
 
 // Get all outbound transfers for a provided address
 alchemy.core
-  .getTokenBalances('0x994b342dd87fc825f66e51ffa3ef71ad818b6893')
+  .getTokenBalances('0x96C8eDA0813D75ab442cc7107A3964390986a77C')
   .then(console.log);
 
 // Get all the NFTs owned by an address
-const nfts = alchemy.nft.getNftsForOwner("0xshah.eth");
+// const nfts = alchemy.nft.getNftsForOwner("0xshah.eth");
 
-// Listen to all new pending transactions
-alchemy.ws.on(
-  { method: "alchemy_pendingTransactions",
-  fromAddress: "0xshah.eth" },
-  (res) => console.log(res)
-);
+// // Listen to all new pending transactions
+// alchemy.ws.on(
+//   { method: "alchemy_pendingTransactions",
+//   fromAddress: "0xshah.eth" },
+//   (res) => console.log(res)
+// );
 
   return (
     <appContext.Provider
