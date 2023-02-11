@@ -2,7 +2,6 @@ import { createContext, useState, useEffect, useContext } from 'react'
 import Web3 from 'web3'
 import { Network, Alchemy } from 'alchemy-sdk';
 import lotteryContract from '../utils/lottery'
-require('dotenv').config();
 export const appContext = createContext()
 
 export const AppProvider = ({ children }) => {
