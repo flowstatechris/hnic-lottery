@@ -199,7 +199,7 @@ export const AppProvider = ({ children }) => {
     console.log("Please install MetaMask")
   }
 }
-
+// Change
   return (
     <appContext.Provider
       value={{
