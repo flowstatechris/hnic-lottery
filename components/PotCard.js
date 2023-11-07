@@ -25,7 +25,7 @@ const PotCard = () => {
         )
       )}
 // change less than 5 to totalPlayer and add totalPlayer input to admin
-// panel
+// panel**
      unit32 totalPlayers;
       {(playerCount < 5) ? (
       <div className={style.btn} onClick={enterLottery}>
