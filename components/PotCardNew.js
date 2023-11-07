@@ -1,7 +1,13 @@
 import style from '../styles/PotCard.module.css'
 import truncateEthAddress from 'truncate-eth-address'
 import { useAppContext } from '../context/context'
-const PotCard = () => {
+const PotCard = () => { 
+  /* add getPlayerBalance to cont. to display on screen 
+     const { getPlayerBalance, lotteryId, lastWinner, lotteryPot, enterLottery, address, pickWinner, getRandom, playerCount, closeLottery, 
+    lottoStatus} = useAppContext()
+ 
+  */
+
   const { lotteryId, lastWinner, lotteryPot, enterLottery, address, pickWinner, getRandom, playerCount, closeLottery, 
     lottoStatus} = useAppContext()
 
@@ -11,6 +17,9 @@ const PotCard = () => {
         Lottery {' '}
         <span className={style.textAccent}>#{lotteryId ? lotteryId : '1'}</span>
       </div>
+    // here add account balance
+    
+
       <div className={style.pot}>
         Pot 🍯: <span className={style.goldAccent}>{lotteryPot} MATIC </span>
       </div>
@@ -27,12 +36,12 @@ const PotCard = () => {
 // change less than 5 to totalPlayer and add totalPlayer input to admin
 // panel
      unit32 totalPlayers;
-      {(playerCount < 5) ? (
+      {(playerCount < totalPlayers) ? (
       <div className={style.btn} onClick={enterLottery}>
         Enter: 1 MATIC
       </div>
       ) : 
-         (playerCount >= 5 && (
+         (playerCount >= totalPlayers && (
           <div className={style.btn}>
             Lottery Closed
           </div>
@@ -41,7 +50,12 @@ const PotCard = () => {
 
 
       {(address == "0x96C8eDA0813D75ab442cc7107A3964390986a77C") ? (
-        <><div className={style.btn} onClick={getRandom}>
+      /*automate the get random # and pick winner here
+        Get random #
+        If random true then
+        Pick winner
+      */
+      <><div className={style.btn} onClick={getRandom}>
           Get Random Number
         </div><div className={style.btn} onClick={pickWinner}>
             Pick Winner!

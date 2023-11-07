@@ -31,10 +31,17 @@ contract Lottery is VRFV2WrapperConsumerBase{
     // this limit based on the network that you select, the size of the request,
     // and the processing of the callback request in the fulfillRandomWords()
     // function.
-    uint32 callbackGasLimit = 50000;
+
+   // uint32 callbackGasLimit = callbackGasLimitV;  uint32 callbackGasLimit = 50000;
+
+    uint32 callbackGasLimit = callbackGasLimitV;
 
     // The default is 3, but you can set this higher.
-    uint16 requestConfirmations = 3;
+    //     uint16 requestConfirmations = requestConfirmationsV; uint16 requestConfirmations = 3;
+
+
+    uint16 requestConfirmations = requestConfirmationsV;
+
 
     // For this example, retrieve 2 random values in one request.
     // Cannot exceed VRFV2Wrapper.getConfig().maxNumWords.
@@ -155,17 +162,26 @@ contract Lottery is VRFV2WrapperConsumerBase{
         uint256 vrf_fee = 0.005 ether; // SWITCH BACK TO 3 FOR POLYGON
 
         currPot -= vrf_fee;
-// 
-        uint256 com_fee = (currPot * 10)/100;
-       
-        address winner = players[index];
 
+    uint256 percentage; // add percentage to addmin panel variable input 
+/* Here change *10 to varible uint256 com_fee = (currPot * percentage)/100; 
+    uint256 com_fee = (currPot * percentage)/100;
+//uint256 com_fee = (currPot * 10)/100; // Old way 
+//
+
+        New change                                     */
+        uint256 com_fee = (currPot * percentage)/100;
+       //
+        address winner = players[index];
+// display lottery player history players[index];
         lotteryHistory[lotteryId] = players[index];
 
         lotteryId++;
-
+// display lottery winner history 
         winnings[winner] += currPot - com_fee;
-
+/* display operatorTotalCommission
+display com_fee
+*/
         operatorTotalCommission += com_fee;
 
         vrf_matic += vrf_fee;
@@ -202,7 +218,7 @@ contract Lottery is VRFV2WrapperConsumerBase{
 
         uint256 commission2Transfer = operatorTotalCommission;
         operatorTotalCommission = 0;
-
+// add array for commision history here
         operator.transfer(commission2Transfer);
     }
 
@@ -218,6 +234,16 @@ contract Lottery is VRFV2WrapperConsumerBase{
     function IsWinner() public view returns (bool) {
         return winnings[msg.sender] > 0;
     }
+    
+   /************************************************* 
+   Add function for Player Balance added to cont. above
+    function getPlayerBalance() external view returns (uint256) {
+        return playersByAddress[_msgSender()].balance;
+    }
+*/
+
+
+
 
      function IsOperator() public view returns (bool) {
         return (msg.sender == lotteryOperator);

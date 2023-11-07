@@ -1,0 +1,16 @@
+.video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    object-position: 0 0;
+  }
+  
+  .image {
+    position: absolute;
+    top: 0;
+    right: 0;
+    object-fit: cover;
+    object-position: 100% 0;
+  }
+  

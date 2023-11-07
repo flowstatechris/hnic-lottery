@@ -1,6 +1,8 @@
 import { createContext, useState, useEffect, useContext } from 'react'
 import Web3 from 'web3'
 import lotteryContract from '../utils/lottery'
+import '../utils/alchemy'
+
 export const appContext = createContext()
 
 export const AppProvider = ({ children }) => {
